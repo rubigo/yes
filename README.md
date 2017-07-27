@@ -6,9 +6,9 @@ implemented before that.
 
 ## Todo
 
-[ ] add tests (version 0.1.1)
-[ ] test on linux/bsd/windows (version 0.1.2)
-[ ] add continuous integration (appveyor, travis, etc.)
+- [ ] add tests (version 0.1.1)
+- [ ] test on linux/bsd/windows (version 0.1.2)
+- [ ] add continuous integration (appveyor, travis, etc.)
     (version 0.1.3)
-[X] publish docs
-[ ] implement security features (`pledge` and `seccomp`)
+- [X] publish docs
+- [ ] implement security features (`pledge` and `seccomp`)
