@@ -1,4 +1,8 @@
 # ![rubigo-coreutils](img/logo.png)
+[![docs:
+published](https://img.shields.io/badge/docs-published-green.svg)](https://rubigo.github.io/yes/rubigo_yes)
+
+
 
 This the `yes` utility, which endlessly repeats its command line arguments. It
 depends on at least rust 1.19.0 to work, since the `eprintln!()` macro wasn't
