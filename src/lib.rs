@@ -12,7 +12,7 @@ pub const VERSION: &'static str         = env!("CARGO_PKG_VERSION");
 /// Name of this tool.
 pub const NAME: &'static str            = "yes";
 
-
+/// A description of this tool.
 pub const DESCRIPTION: &'static str     = "Repeats a given string and a newline \
 character infinitely on stdout.";
 
@@ -23,8 +23,9 @@ pub const DEFAULT_STRING: &'static str  = "y";
 pub const BUFSIZE: usize                = 16384;
 
 /// Represents a request, this tells the yes utility what it has to do.
-/// Depending on the options passed on the command line, we might do different
-/// things, which are represented here.
+/// Depending on the options passed on the command line, we might take
+/// different actions, which are represented here.
+#[derive(Debug, PartialEq)]
 pub enum Request {
     /// Main purpose of this utility: send a given string followed by a newline
     /// repeatedly to `stdout`.
@@ -38,7 +39,9 @@ pub enum Request {
 }
 
 /// These are all the errors that can occur in this utility.
+#[derive(Debug, PartialEq)]
 pub enum Error {
+
     /// An invalid option was encountered while parsing the options.
     InvalidOption(getopts::Fail)
 }
@@ -122,6 +125,17 @@ pub fn parse_args(args: Vec<String>) -> Result<Request, Error> {
     };
 
     Ok(RepeatString(string))
+}
+
+#[test]
+fn test_parse_args() {
+    // test help options
+    assert_eq!(parse_args(vec!["-h".to_string()]), Ok(ShowHelp));
+    assert_eq!(parse_args(vec!["--help".to_string()]), Ok(ShowHelp));
+
+    // test version options
+    assert_eq!(parse_args(vec!["-v".to_string()]), Ok(ShowVersion));
+    assert_eq!(parse_args(vec!["--version".to_string()]), Ok(ShowVersion));
 }
 
 /// Generates a help text using the `getopts` crate. It is derived from the
