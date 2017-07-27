@@ -1,6 +1,7 @@
 [package]
-name = "rubgo-yes"
+name = "rubigo-yes"
 version = "0.1.0"
 authors = ["Patrick Elsen <pelsen@xfbs.net>"]
 
 [dependencies]
+getopts = "0.2"
