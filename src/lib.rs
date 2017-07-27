@@ -177,7 +177,10 @@ pub fn repeat_string(string: &str) {
 
     // continuously print to stdout
     loop {
-        stdout.write_all(buf.as_bytes());
+        match stdout.write_all(buf.as_bytes()) {
+            Ok(_) => continue,
+            Err(_) => break
+        }
     }
 }
 
