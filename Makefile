@@ -10,14 +10,15 @@ test:
 doc:
 	$(CARGO) doc
 
-update-gh-pages: doc
-	$(RM) gh-pages
-	git clone . gh-pages
-	cd gh-pages && $(RM) * .*
-	[ "`git branch --list gh-pages`" ] && git branch -D gh-pages
-	cd gh-pages && git checkout --orphan gh-pages
-	cp -r target/doc/* gh-pages
-	cd gh-pages && git add . && git commit -m "updates gh-pages"
-	$(RM) gh-pages
+update-gh-pages:
+	git pull origin master
+	$(RM) target
+	mkdir -p target/doc
+	git worktree prune
+	git worktree add target/doc gh-pages
+	cd target/doc && git reset --hard HEAD~1
+	cargo doc
+	cd target/doc && git add .
+	cd target/doc && git commit -m "updates gh-pages"
 	git push -f origin gh-pages
 
