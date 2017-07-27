@@ -22,7 +22,7 @@ pub const DEFAULT_STRING: &'static str  = "y";
 /// The buffer size to use when printing the repeated string.
 pub const BUFSIZE: usize                = 16384;
 
-/// Represents a request, this tells the yes utility what it has to do.
+/// Represents a request, this tells the `yes` utility what it has to do.
 /// Depending on the options passed on the command line, we might take
 /// different actions, which are represented here.
 #[derive(Debug, PartialEq)]
