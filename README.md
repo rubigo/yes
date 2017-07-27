@@ -1,4 +1,4 @@
-# ![rubigo-coreutils](img/logo.png): yes
+# ![rubigo-coreutils](img/logo.png)
 
 This the `yes` utility, which endlessly repeats its command line arguments. It
 depends on at least rust 1.19.0 to work, since the `eprintln!()` macro wasn't
