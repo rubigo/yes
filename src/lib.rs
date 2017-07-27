@@ -1,7 +1,7 @@
 extern crate getopts;
 
 use getopts::{Options, ParsingStyle};
-use std::io::{stdout, stderr, Write};
+use std::io::{stdout, Write};
 use std::fmt;
 use std::iter::repeat;
 
@@ -59,7 +59,7 @@ impl Error {
 
     /// Prints the error to stderr.
     pub fn show(&self) {
-        println!("{}", self.message());
+        eprintln!("{}", self.message());
     }
 }
 
@@ -136,6 +136,21 @@ fn test_parse_args() {
     // test version options
     assert_eq!(parse_args(vec!["-v".to_string()]), Ok(ShowVersion));
     assert_eq!(parse_args(vec!["--version".to_string()]), Ok(ShowVersion));
+
+    // use the DEAFULT_STRING if nothing is specified
+    assert_eq!(parse_args(vec![]), Ok(RepeatString(DEFAULT_STRING.to_string())));
+
+    // use whatever is given on command line
+    assert_eq!(parse_args(vec!["str".to_string()]),
+               Ok(RepeatString("str".to_string())));
+
+    // join multiple arguments together
+    assert_eq!(parse_args(vec!["str".to_string(), "dup".to_string()]),
+               Ok(RepeatString("str dup".to_string())));
+
+    // allow command line flags as string
+    assert_eq!(parse_args(vec!["--".to_string(), "-h".to_string()]),
+               Ok(RepeatString("-h".to_string())));
 }
 
 /// Generates a help text using the `getopts` crate. It is derived from the
