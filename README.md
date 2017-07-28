@@ -1,6 +1,6 @@
 # ![rubigo-coreutils](img/logo.png)
 [![docs:
-published](https://img.shields.io/badge/docs-published-green.svg)](https://rubigo.github.io/yes/rubigo_yes)
+published](https://img.shields.io/badge/docs-published-green.svg)](https://rubigo.github.io/yes/rubigo_yes) [![current tag](https://img.shields.io/github/tag/rubigo/yes.svg)]()
 
 
 
