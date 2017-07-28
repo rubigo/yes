@@ -6,6 +6,7 @@ authors = ["Patrick Elsen <pelsen@xfbs.net>"]
 [dependencies]
 getopts = "0.2"
 textwrap = "0.7.0"
+clap = "2.25.1"
 
 [dev-dependencies]
 regex = "0.2"

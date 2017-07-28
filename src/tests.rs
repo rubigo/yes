@@ -2,6 +2,7 @@ extern crate regex;
 use self::regex::Regex;
 use super::*;
 
+/*
 #[test]
 fn parse_args_help_works() {
     assert_eq!(parse_args(vec!["-h".to_string()]), Ok(ShowHelp));
@@ -56,7 +57,7 @@ fn parse_args_error_has_message() {
         _ => unreachable!()
     }
 }
-
+*/
 #[test]
 fn string_newline_terminate_works() {
     assert_eq!("word".to_string().newline_terminate(), "word\n");
@@ -74,27 +75,6 @@ fn string_fill_works() {
     // make sure buf only contains the word followed by a newline
     let re = Regex::new(r"^(myword\n)+$").unwrap();
     assert!(re.is_match(&buf));
-}
-
-#[test]
-fn version_text_returns_version() {
-    let re = Regex::new(r"^.* version \d+(\.\d+)*.*$").unwrap();
-    assert!(re.is_match(&version_text()));
-}
-
-#[test]
-fn help_text_documents_options() {
-    // test if it documents the help flag
-    let help_flag = Regex::new(r"--help").unwrap();
-    assert!(help_flag.is_match(&help_text()));
-
-    // test if it documents the version flag
-    let version_flag = Regex::new(r"--version").unwrap();
-    assert!(version_flag.is_match(&help_text()));
-
-    // test if it documents the usage
-    let usage = Regex::new(r"Usage: ").unwrap();
-    assert!(usage.is_match(&help_text()));
 }
 
 struct Full {
