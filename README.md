@@ -6,13 +6,13 @@
 
 This the `yes` utility, part of
 [rubigo-coreutils](https://github.com/rubigo/coreutils), which endlessly repeats
-its command line arguments. It needs on at least rust `1.19.0` to work, since
+its command line arguments. It needs at least rust `1.19.0` to work, since
 the `eprintln!()` macro wasn't implemented before that.
 
 ## Features
 
 It is both a library and a binary, so it can be embedded into other projects if
-necessary. It should be compatible with both GNU `yes` and BSD `yes`, except
+necessary. It should be compatible with both GNU `yes` and OpenBSD `yes`, except
 that it has optional command-line flags `-h` for help and `-v` for version,
 which those don't have. Thus, if you want it to repeat `-v`, instead of `yes -v`
 you'd have to use `yes -- -v`. Additionally, it implements an optimisation from
@@ -25,6 +25,6 @@ one go, as opposed to sending the strings individually.
 - [X] make it pretty
 - [ ] document everything
 - [X] add continuous integration (appveyor, travis, etc.)
-- [ ] test everything (version 0.1.1)
+- [ ] get test coverage over 80% (version 0.1.1)
 - [ ] test on linux/bsd/windows (version 0.1.2)
 - [ ] implement security features (`pledge` and `seccomp`) (version 0.1.3)
