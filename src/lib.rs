@@ -1,6 +1,3 @@
-extern crate getopts;
-extern crate textwrap;
-
 #[cfg(test)]
 mod tests;
 
@@ -44,34 +41,34 @@ impl<T: Write> WriteRepeat for T {
 }
 
 /// A trait for something that can be repeated to fit a certain size.
-pub trait Fillable {
+pub trait Fillable: ToOwned {
     /// Repeat self until it fills up to `max`.
-    fn fill(&self, max: usize) -> Self;
+    fn fill(&self, max: usize) -> Self::Owned;
 }
 
-impl Fillable for String {
-    fn fill(&self, max: usize) -> Self {
+impl Fillable for str {
+    fn fill(&self, max: usize) -> Self::Owned {
         // calculate how many times our string fits into a bufsize
         let times = max / self.len();
 
         // repeat the string this many times and join it together
-        repeat(self.as_str()).take(times).collect::<Vec<&str>>().join("")
+        repeat(self).take(times).collect::<Vec<&str>>().join("")
     }
 }
 
 /// A trait for something that can be terminated with a newline.
-pub trait NewlineTerminate: Clone {
-    fn push(&mut self, ch: char);
-    fn newline_terminate(&self) -> Self {
-        let mut copy = self.clone();
-        copy.push('\n');
+pub trait WithNewline: ToOwned {
+    fn push(dest: &mut Self::Owned, ch: char);
+    fn with_newline(&self) -> Self::Owned {
+        let mut copy = self.to_owned();
+        Self::push(&mut copy, '\n');
         copy
     }
 }
 
-impl NewlineTerminate for String {
-    fn push(&mut self, ch: char) {
-        self.push(ch);
+impl WithNewline for str {
+    fn push(dest: &mut Self::Owned, ch: char) {
+        dest.push(ch);
     }
 }
 
@@ -79,11 +76,11 @@ pub trait Yes {
     fn yes(&mut self, string: &str) -> io::Error;
 }
 
-impl<T: Write> Yes for T {
+impl<T: WriteRepeat> Yes for T {
     fn yes(&mut self, string: &str) -> io::Error {
         self.write_repeat(
-            string.to_string().newline_terminate()
-            .fill(BUFSIZE)
-            .as_bytes())
+            string.with_newline()
+                .fill(BUFSIZE)
+                .as_bytes())
     }
 }
