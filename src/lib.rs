@@ -1,5 +1,8 @@
 extern crate getopts;
 
+#[cfg(test)]
+extern crate regex;
+
 use getopts::{Options, ParsingStyle};
 use std::io::{stdout, Write};
 use std::fmt;
@@ -157,7 +160,6 @@ fn test_parse_args() {
         Err(InvalidOption(_)) => assert!(true),
         _ => assert!(false)
     }
-
 }
 
 /// Generates a help text using the `getopts` crate. It is derived from the
@@ -204,4 +206,15 @@ pub fn repeat_buffer(string: &str) -> String {
 
     // repeat the string this many times and join it together
     repeat(s).take(times).collect::<Vec<String>>().join("")
+}
+
+#[test]
+fn test_repeat_buffer() {
+    use regex::Regex;
+
+    let buf = repeat_buffer("word");
+
+    // make sure buf only contains the word followed by a newline
+    let re = Regex::new(r"^(word\n)+$").unwrap();
+    assert!(re.is_match(&buf));
 }
