@@ -96,3 +96,28 @@ fn help_text_documents_options() {
     let usage = Regex::new(r"Usage: ").unwrap();
     assert!(usage.is_match(&help_text()));
 }
+
+struct Full {
+}
+
+impl Full {
+    fn new() -> Self {
+        Full{}
+    }
+}
+
+impl Write for Full {
+    fn write(&mut self, _: &[u8]) -> io::Result<usize> {
+        Err(io::Error::new(io::ErrorKind::BrokenPipe, "full"))
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+#[test]
+fn write_repeat_stops_on_error() {
+    assert_eq!(Full::new().write_repeat("some data".as_bytes()).kind(),
+               io::ErrorKind::BrokenPipe);
+}
