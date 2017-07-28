@@ -1,7 +1,7 @@
 extern crate getopts;
 
 #[cfg(test)]
-extern crate regex;
+mod tests;
 
 use getopts::{Options, ParsingStyle};
 use std::io::{stdout, Write};
@@ -129,39 +129,6 @@ pub fn parse_args(args: Vec<String>) -> Result<Request, Error> {
     Ok(RepeatString(string))
 }
 
-#[test]
-fn test_parse_args() {
-    // test help options
-    assert_eq!(parse_args(vec!["-h".to_string()]), Ok(ShowHelp));
-    assert_eq!(parse_args(vec!["--help".to_string()]), Ok(ShowHelp));
-
-    // test version options
-    assert_eq!(parse_args(vec!["-v".to_string()]), Ok(ShowVersion));
-    assert_eq!(parse_args(vec!["--version".to_string()]), Ok(ShowVersion));
-
-    // use the DEAFULT_STRING if nothing is specified
-    assert_eq!(parse_args(vec![]), Ok(RepeatString(DEFAULT_STRING.to_string())));
-
-    // use whatever is given on command line
-    assert_eq!(parse_args(vec!["str".to_string()]),
-               Ok(RepeatString("str".to_string())));
-
-    // join multiple arguments together
-    assert_eq!(parse_args(vec!["str".to_string(), "dup".to_string()]),
-               Ok(RepeatString("str dup".to_string())));
-
-    // allow command line flags as string
-    assert_eq!(parse_args(vec!["--".to_string(), "-h".to_string()]),
-               Ok(RepeatString("-h".to_string())));
-
-    // check if it returns an error when encountering illegal arguments
-    assert!(parse_args(vec!["-g".to_string()]).is_err());
-    match parse_args(vec!["--global".to_string()]) {
-        Err(InvalidOption(_)) => assert!(true),
-        _ => assert!(false)
-    }
-}
-
 /// Generates a help text using the `getopts` crate. It is derived from the
 /// `NAME`, the `DESCRIPTION`, as well as from the options.
 pub fn help_text() -> String {
@@ -206,15 +173,4 @@ pub fn repeat_buffer(string: &str) -> String {
 
     // repeat the string this many times and join it together
     repeat(s).take(times).collect::<Vec<String>>().join("")
-}
-
-#[test]
-fn test_repeat_buffer() {
-    use regex::Regex;
-
-    let buf = repeat_buffer("word");
-
-    // make sure buf only contains the word followed by a newline
-    let re = Regex::new(r"^(word\n)+$").unwrap();
-    assert!(re.is_match(&buf));
 }
