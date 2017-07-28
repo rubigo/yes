@@ -187,17 +187,3 @@ pub fn help_text() -> String {
 pub fn version_text() -> String {
     format!("{} version {}", NAME, VERSION)
 }
-
-/// Generates a buffer, which is maximally `BUFSIZE` big, consisting of the
-/// string repeated as many times as will fit into the buffer, joined with
-/// newline characters.
-pub fn buffer_fill(string: &str, max: usize) -> String {
-    // append newline to string
-    let mut s = string.to_owned();
-
-    // calculate how many times our string fits into a bufsize
-    let times = max / s.len();
-
-    // repeat the string this many times and join it together
-    repeat(s).take(times).collect::<Vec<String>>().join("")
-}
