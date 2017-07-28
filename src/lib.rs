@@ -64,7 +64,7 @@ impl Error {
 
     /// Prints the error to stderr.
     pub fn show(&self) {
-        eprintln!("{}", self.message());
+        eprintln!("Error: {}", self.message());
     }
 }
 
