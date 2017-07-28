@@ -42,7 +42,18 @@ fn parse_args_raises_error_on_illegal_argument() {
     assert!(parse_args(vec!["-g".to_string()]).is_err());
     match parse_args(vec!["--global".to_string()]) {
         Err(InvalidOption(_)) => assert!(true),
-        _ => assert!(false)
+        _ => unreachable!()
+    }
+}
+
+#[test]
+fn parse_args_error_has_message() {
+    let re = Regex::new(r"Unrecognized option").unwrap();
+
+    assert!(parse_args(vec!["-g".to_string()]).is_err());
+    match parse_args(vec!["--global".to_string()]) {
+        Err(e) => assert!(re.is_match(&e.message())),
+        _ => unreachable!()
     }
 }
 
