@@ -1,4 +1,5 @@
 extern crate getopts;
+extern crate textwrap;
 
 #[cfg(test)]
 mod tests;
@@ -17,7 +18,9 @@ pub const NAME: &'static str            = "yes";
 
 /// A description of this tool.
 pub const DESCRIPTION: &'static str     = "Repeats a given string and a newline \
-character infinitely on stdout.";
+character infinitely on stdout. If no string is supplied, it uses the default \
+string ‘y’. Command exits as soon as stdout is closed and no more data can be \
+written to it. ";
 
 /// The default string to repeat.
 pub const DEFAULT_STRING: &'static str  = "y";
@@ -191,7 +194,9 @@ pub fn parse_args(args: Vec<String>) -> Result<Request, Error> {
 /// `NAME`, the `DESCRIPTION`, as well as from the options.
 pub fn help_text() -> String {
     let opts = options();
-    let short_usage = format!("{} [STRING]", opts.short_usage(NAME));
+    let short_usage = format!("{} [--] [STRING]\n{}", 
+                              opts.short_usage(NAME), 
+                              textwrap::fill(DESCRIPTION, 80));
     opts.usage(&short_usage)
 }
 
