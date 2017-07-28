@@ -70,3 +70,18 @@ fn version_text_returns_version() {
     let re = Regex::new(r"^.* version \d+(\.\d+)*.*$").unwrap();
     assert!(re.is_match(&version_text()));
 }
+
+#[test]
+fn help_text_documents_options() {
+    // test if it documents the help flag
+    let help_flag = Regex::new(r"--help").unwrap();
+    assert!(help_flag.is_match(&help_text()));
+
+    // test if it documents the version flag
+    let version_flag = Regex::new(r"--version").unwrap();
+    assert!(version_flag.is_match(&help_text()));
+
+    // test if it documents the usage
+    let usage = Regex::new(r"Usage: ").unwrap();
+    assert!(usage.is_match(&help_text()));
+}
