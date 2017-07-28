@@ -21,8 +21,7 @@ addons:
       - libdw-dev
       - cmake
       - gcc
-      - binutils-dev
-      - libbfd-dev
+      - binutils-2.26-dev
 
 after_success: |
   wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz &&
