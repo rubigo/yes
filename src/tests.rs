@@ -1,9 +1,10 @@
 extern crate regex;
 use self::regex::Regex;
+use std::str;
 use super::*;
 
 #[test]
-fn string_newline_terminate_works() {
+fn string_with_newline_works() {
     assert_eq!("word".with_newline(), "word\n");
     assert_eq!("myname".with_newline(), "myname\n");
 }
@@ -40,10 +41,34 @@ impl Write for Full {
     }
 }
 
-
-
 #[test]
 fn write_repeat_stops_on_error() {
     assert_eq!(Full::new().write_repeat("some data".as_bytes()).kind(),
                io::ErrorKind::BrokenPipe);
+}
+
+struct Checker {
+    re: Regex
+}
+
+impl Checker {
+    fn new(reg: &str) -> Self {
+        Checker { re: Regex::new(reg).unwrap() }
+    }
+}
+
+impl Write for Checker {
+    fn write(&mut self, data: &[u8]) -> io::Result<usize> {
+        assert!(self.re.is_match(str::from_utf8(data).unwrap()));
+        Err(io::Error::new(io::ErrorKind::BrokenPipe, "full"))
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+#[test]
+fn yes_works() {
+    Checker::new(r"^(some name\n)+$").yes("some name");
 }
