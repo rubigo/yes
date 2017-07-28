@@ -23,7 +23,7 @@ one go, as opposed to sending the strings individually.
 
 - [X] make it work
 - [X] make it pretty
-- [X] document everything
+- [ ] document everything
 - [X] add continuous integration (appveyor, travis, etc.)
 - [ ] test everything (version 0.1.1)
 - [ ] test on linux/bsd/windows (version 0.1.2)

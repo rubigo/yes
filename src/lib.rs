@@ -75,7 +75,9 @@ impl fmt::Display for Request {
     }
 }
 
+/// A trait for something that can be repeatedly (read: infintely) written to.
 trait WriteRepeat {
+    /// Write the given data repeatedly, until writing triggers an error.
     fn write_repeat(&mut self, data: &[u8]) -> io::Error;
 }
 
@@ -90,10 +92,13 @@ impl<T: Write> WriteRepeat for T {
     }
 }
 
+/// A trait for something that can be repeated to fit a certain size.
 trait Fillable {
+    /// Repeat self until it fills up to `max`.
     fn fill(&self, max: usize) -> Self;
 }
 
+/// A trait for something that can be terminated with a newline.
 trait NewlineTerminate: Clone {
     fn push(&mut self, ch: char);
     fn newline_terminate(&self) -> Self {
@@ -126,8 +131,15 @@ impl Request {
             ShowHelp            => println!("{}", self),
             ShowVersion         => println!("{}", self),
             RepeatString(ref s) => {
+                // get a reference to stdout
                 let out = stdout();
-                out.lock().write_repeat(s.newline_terminate().fill(BUFSIZE).as_bytes());
+
+                // lock stdout, and repeatedly write our string
+                out.lock()
+                    .write_repeat(
+                        s.newline_terminate()
+                        .fill(BUFSIZE)
+                        .as_bytes());
             }
         }
     }
