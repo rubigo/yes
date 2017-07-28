@@ -1,8 +1,10 @@
-#[cfg(test)]
-mod tests;
+#![warn(missing_docs)]
 
 use std::io::{self, Write};
 use std::iter::repeat;
+
+#[cfg(test)]
+mod tests;
 
 /// Version of this crate. It is parsed from the environment variable that
 /// cargo sets when building the crate.
