@@ -49,16 +49,6 @@ pub trait Fillable {
     fn fill(&self, max: usize) -> Self;
 }
 
-/// A trait for something that can be terminated with a newline.
-pub trait NewlineTerminate: Clone {
-    fn push(&mut self, ch: char);
-    fn newline_terminate(&self) -> Self {
-        let mut copy = self.clone();
-        copy.push('\n');
-        copy
-    }
-}
-
 impl Fillable for String {
     fn fill(&self, max: usize) -> Self {
         // calculate how many times our string fits into a bufsize
@@ -69,8 +59,31 @@ impl Fillable for String {
     }
 }
 
+/// A trait for something that can be terminated with a newline.
+pub trait NewlineTerminate: Clone {
+    fn push(&mut self, ch: char);
+    fn newline_terminate(&self) -> Self {
+        let mut copy = self.clone();
+        copy.push('\n');
+        copy
+    }
+}
+
 impl NewlineTerminate for String {
     fn push(&mut self, ch: char) {
         self.push(ch);
+    }
+}
+
+pub trait Yes {
+    fn yes(&mut self, string: &str) -> io::Error;
+}
+
+impl<T: Write> Yes for T {
+    fn yes(&mut self, string: &str) -> io::Error {
+        self.write_repeat(
+            string.to_string().newline_terminate()
+            .fill(BUFSIZE)
+            .as_bytes())
     }
 }
