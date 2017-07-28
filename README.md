@@ -31,6 +31,6 @@ name | current version | description
 - [X] make it pretty
 - [ ] document everything
 - [X] add continuous integration (appveyor, travis, etc.)
-- [ ] get test coverage over 80% (version 0.1.1)
+- [X] get test coverage over 80% (version 0.1.1)
 - [ ] test on linux/bsd/windows (version 0.1.2)
 - [ ] implement security features (`pledge` and `seccomp`) (version 0.1.3)
