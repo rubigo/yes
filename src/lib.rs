@@ -1,4 +1,4 @@
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rubigo/coreutils/master/logo.png")]
+#![doc(html_logo_url = "https://rubigo.github.io/coreutils/logo.png")]
 #![warn(missing_docs)]
 
 use std::io::{self, Write};

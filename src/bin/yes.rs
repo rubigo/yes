@@ -1,3 +1,5 @@
+#![doc(html_logo_url = "https://rubigo.github.io/coreutils/logo.png")]
+
 extern crate rubigo_yes;
 extern crate clap;
 use clap::{App, Arg};
