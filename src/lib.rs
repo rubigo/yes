@@ -41,7 +41,6 @@ pub enum Request {
 /// These are all the errors that can occur in this utility.
 #[derive(Debug, PartialEq)]
 pub enum Error {
-
     /// An invalid option was encountered while parsing the options.
     InvalidOption(getopts::Fail)
 }
@@ -151,6 +150,14 @@ fn test_parse_args() {
     // allow command line flags as string
     assert_eq!(parse_args(vec!["--".to_string(), "-h".to_string()]),
                Ok(RepeatString("-h".to_string())));
+
+    // check if it returns an error when encountering illegal arguments
+    assert!(parse_args(vec!["-g".to_string()]).is_err());
+    match parse_args(vec!["--global".to_string()]) {
+        Err(InvalidOption(_)) => assert!(true),
+        _ => assert!(false)
+    }
+
 }
 
 /// Generates a help text using the `getopts` crate. It is derived from the
