@@ -19,6 +19,14 @@ you'd have to use `yes -- -v`. Additionally, it implements an optimisation from
 GNU `yes`, by building a buffer (which is lmited by `BUFSIZE`) and sends that in 
 one go, as opposed to sending the strings individually. 
 
+## Dependencies
+
+name | current version | description
+---: | :-------------: | :----------
+[clap](https://github.com/kbknapp/clap-rs) |
+[![Crates.io](https://img.shields.io/crates/v/clap.svg)](https://crates.io/crates/clap)
+| *Used to parse command-line arguments*
+
 ## Todo
 
 - [X] make it work
