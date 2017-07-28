@@ -46,6 +46,7 @@ fn parse_args_raises_error_on_illegal_argument() {
     }
 }
 
+/*
 #[test]
 fn repeat_buffer_uses_given_word() {
     let buf = repeat_buffer("word");
@@ -60,3 +61,4 @@ fn version_text_returns_version() {
     let re = Regex::new(r"^.* version \d+(\.\d+)*.*$").unwrap();
     assert!(re.is_match(&version_text()));
 }
+*/

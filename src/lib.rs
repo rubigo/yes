@@ -4,7 +4,7 @@ extern crate getopts;
 mod tests;
 
 use getopts::{Options, ParsingStyle};
-use std::io::{stdout, Write};
+use std::io::{self, stdout, Write};
 use std::fmt;
 use std::iter::repeat;
 
@@ -75,17 +75,63 @@ impl fmt::Display for Request {
     }
 }
 
-impl Request {
-    /// Do the request. This performs the action suggested by the request.
-    pub fn do_it(&self) {
-        match *self {
-            ShowHelp => println!("{}", self),
-            ShowVersion => println!("{}", self),
-            RepeatString(ref s) => repeat_string(s)
+trait WriteRepeat {
+    fn write_repeat(&mut self, data: &[u8]) -> io::Error;
+}
+
+impl<T: Write> WriteRepeat for T {
+    fn write_repeat(&mut self, data: &[u8]) -> io::Error {
+        loop {
+            match self.write_all(data) {
+                Ok(_) => continue,
+                Err(e) => return e
+            }
         }
     }
 }
 
+trait Fillable {
+    fn fill(&self, max: usize) -> Self;
+}
+
+trait NewlineTerminate: Clone {
+    fn push(&mut self, ch: char);
+    fn newline_terminate(&self) -> Self {
+        let mut copy = self.clone();
+        copy.push('\n');
+        copy
+    }
+}
+
+impl Fillable for String {
+    fn fill(&self, max: usize) -> Self {
+        // calculate how many times our string fits into a bufsize
+        let times = max / self.len();
+
+        // repeat the string this many times and join it together
+        repeat(self.as_str()).take(times).collect::<Vec<&str>>().join("")
+    }
+}
+
+impl NewlineTerminate for String {
+    fn push(&mut self, ch: char) {
+        self.push(ch);
+    }
+}
+
+impl Request {
+    /// Do the request. This performs the action suggested by the request.
+    pub fn do_it(&self) {
+        match *self {
+            ShowHelp            => println!("{}", self),
+            ShowVersion         => println!("{}", self),
+            RepeatString(ref s) => {
+                let out = stdout();
+                out.lock().write_repeat(s.newline_terminate().fill(BUFSIZE).as_bytes());
+            }
+        }
+    }
+}
 
 /// Create an options object.
 fn options() -> Options {
@@ -142,34 +188,15 @@ pub fn version_text() -> String {
     format!("{} version {}", NAME, VERSION)
 }
 
-/// Print a string repeatedly to `stdout`.
-pub fn repeat_string(string: &str) {
-    // creates a buffer, containing a lot of repetitions of our string
-    let buf = repeat_buffer(string);
-
-    // create a handle to stdout
-    let stdout = stdout();
-    let mut stdout = stdout.lock();
-
-    // continuously print to stdout
-    loop {
-        match stdout.write_all(buf.as_bytes()) {
-            Ok(_) => continue,
-            Err(_) => break
-        }
-    }
-}
-
 /// Generates a buffer, which is maximally `BUFSIZE` big, consisting of the
 /// string repeated as many times as will fit into the buffer, joined with
 /// newline characters.
-pub fn repeat_buffer(string: &str) -> String {
+pub fn buffer_fill(string: &str, max: usize) -> String {
     // append newline to string
     let mut s = string.to_owned();
-    s.push('\n');
 
     // calculate how many times our string fits into a bufsize
-    let times = BUFSIZE / s.len();
+    let times = max / s.len();
 
     // repeat the string this many times and join it together
     repeat(s).take(times).collect::<Vec<String>>().join("")
