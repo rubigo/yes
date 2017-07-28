@@ -22,6 +22,7 @@ addons:
       - cmake
       - gcc
       - binutils-2.26-dev
+      - libiberty-dev
 
 after_success: |
   wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz &&
