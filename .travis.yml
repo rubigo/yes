@@ -22,7 +22,7 @@ addons:
       - cmake
       - gcc
       - binutils-dev
-      - libbdf-dev
+      - libbfd-dev
 
 after_success: |
   wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz &&
