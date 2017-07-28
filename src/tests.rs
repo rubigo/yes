@@ -46,13 +46,22 @@ fn parse_args_raises_error_on_illegal_argument() {
     }
 }
 
-/*
 #[test]
-fn repeat_buffer_uses_given_word() {
-    let buf = repeat_buffer("word");
+fn string_newline_terminate_works() {
+    assert_eq!("word".to_string().newline_terminate(), "word\n");
+    assert_eq!("myname".to_string().newline_terminate(), "myname\n");
+}
+
+#[test]
+fn string_fill_works() {
+    let max = 1500;
+    let buf = "myword\n".to_string().fill(max);
+
+    // make sure string isn't too long
+    assert!(buf.len() <= max);
 
     // make sure buf only contains the word followed by a newline
-    let re = Regex::new(r"^(word\n)+$").unwrap();
+    let re = Regex::new(r"^(myword\n)+$").unwrap();
     assert!(re.is_match(&buf));
 }
 
@@ -61,4 +70,3 @@ fn version_text_returns_version() {
     let re = Regex::new(r"^.* version \d+(\.\d+)*.*$").unwrap();
     assert!(re.is_match(&version_text()));
 }
-*/
